@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MorriesClient · Ghost Client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #080b10;
+            color: #eef3fc;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        .bg-ambient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: radial-gradient(circle at 30% 20%, rgba(35, 255, 120, 0.12) 0%, #03060a 90%);
+        }
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: 
+                linear-gradient(rgba(60, 255, 120, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(60, 255, 120, 0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 60% 70%, rgba(0, 255, 150, 0.08) 0%, transparent 60%);
+            filter: blur(60px);
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem 5rem;
+            position: relative;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0 1.5rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #3bff92);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #ccdeee;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #3bff92;
+        }
+        .nav-links .cta {
+            background: rgba(59, 255, 146, 0.15);
+            border: 1px solid rgba(59, 255, 146, 0.4);
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+        }
+        .hero {
+            text-align: center;
+            margin: 3rem 0 3rem;
+            scroll-margin-top: 80px;
+        }
+        .ghost-tag {
+            display: inline-block;
+            background: rgba(20, 30, 30, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.85rem;
+            border: 1px solid rgba(59, 255, 146, 0.3);
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #ffffff, #3bff92, #00d9ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            margin: 0.5rem 0;
+        }
+        .hero-desc {
+            max-width: 620px;
+            margin: 1rem auto 0;
+            font-size: 1.05rem;
+            color: #bdccdb;
+        }
+        .trust-strip {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2.5rem 0 2rem;
+        }
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(25, 32, 38, 0.45);
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,240,0.05);
+        }
+        .trust-item i {
+            color: #3bff92;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0 4rem;
+        }
+        .f-card {
+            background: rgba(16, 22, 30, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(70, 90, 90, 0.3);
+            text-align: center;
+        }
+        .f-card:hover {
+            border-color: #3bff92;
+            transform: translateY(-4px);
+            background: rgba(25, 35, 45, 0.7);
+        }
+        .card-icon {
+            font-size: 2.5rem;
+            color: #3bff92;
+            margin-bottom: 1rem;
+        }
+        .f-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        .roadmap {
+            background: rgba(0, 4, 12, 0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 38px;
+            padding: 2rem;
+            margin: 2rem 0 2rem;
+            border: 1px solid rgba(59, 255, 146, 0.2);
+            scroll-margin-top: 80px;
+        }
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(59, 255, 146, 0.4);
+            padding-bottom: 0.6rem;
+            margin-bottom: 2rem;
+        }
+        .section-header h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+        }
+        .badge-dev {
+            background: #1f2f1f;
+            padding: 0.3rem 1rem;
+            border-radius: 80px;
+            font-size: 0.7rem;
+        }
+        .todo-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+        .todo {
+            background: rgba(30, 40, 48, 0.6);
+            border-radius: 22px;
+            padding: 0.9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+            border: 1px solid #2c3a3a;
+        }
+        .todo i {
+            font-size: 1.2rem;
+            color: #ffbc6e;
+        }
+        .status {
+            font-size: 0.7rem;
+            background: #1e2c26;
+            padding: 0.2rem 0.8rem;
+            border-radius: 24px;
+            color: #b5ffcf;
+        }
+        .github-zone {
+            text-align: center;
+            margin: 3rem 0 2rem;
+        }
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #0f1820;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #f0f3fa;
+            text-decoration: none;
+            border: 1px solid #2f3f46;
+            transition: 0.2s;
+        }
+        .github-btn:hover {
+            border-color: #3bff92;
+            background: #14262e;
+            gap: 1rem;
+        }
+        footer {
+            text-align: center;
+            padding-top: 3rem;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            opacity: 0.55;
+            border-top: 1px solid #2b353f;
+        }
+        @media (max-width: 780px) {
+            h1 { font-size: 2.8rem; }
+            .container { padding: 1rem 1.2rem 3rem; }
+            .f-card h3 { font-size: 1.2rem; }
+            .nav-links { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-ambient"></div>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="container">
+    <!-- 顶部导航栏 -->
+    <div class="navbar">
+        <div class="logo">MorriesClient</div>
+        <div class="nav-links">
+            <a href="#intro">Introduction</a>
+            <a href="https://github.com/BadJui" target="_blank">GitHub</a>
+            <a href="https://space.bilibili.com/514225993" target="_blank">Bilibili</a>
+            <a href="#roadmap">Future</a>
+            <a href="#" class="cta">Download</a>
+        </div>
+    </div>
+
+    <!-- 介绍区域 -->
+    <div id="intro" class="hero">
+        <div class="ghost-tag"><i class="fas fa-shield-alt"></i>  invisible · modular · no telemetry</div>
+        <h1>MorriesClient</h1>
+        <div class="hero-desc">
+            Pure user‑land ghost client — zero bloat, silent injection, extreme responsiveness.
+        </div>
+    </div>
+
+    <div class="trust-strip">
+        <div class="trust-item"><i class="fas fa-cubes"></i> On‑demand</div>
+        <div class="trust-item"><i class="fas fa-tachometer-alt"></i> Lightweight</div>
+        <div class="trust-item"><i class="fas fa-trash-alt"></i> No traces</div>
+        <div class="trust-item"><i class="fas fa-mask"></i> Stealth core</div>
+    </div>
+
+    <!-- 功能模块网格 -->
+    <div class="feature-grid">
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-mouse-pointer"></i></div>
+            <h3>Clicker</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-shield-virus"></i></div>
+            <h3>BlockHit</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-hand-peace"></i></div>
+            <h3>WTap</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-cubes"></i></div>
+            <h3>Scaffold</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-running"></i></div>
+            <h3>Sprint</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-flask"></i></div>
+            <h3>ThrowPot</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-fish"></i></div>
+            <h3>AutoRod</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-shoe-prints"></i></div>
+            <h3>Stap</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-stopwatch"></i></div>
+            <h3>FastStop</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-hourglass-half"></i></div>
+            <h3>Timer</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+            <h3>Levitate</h3>
+        </div>
+        <div class="f-card">
+            <div class="card-icon"><i class="fas fa-hourglass-start"></i></div>
+            <h3>AntiAFK</h3>
+        </div>
+    </div>
+
+    <!-- Roadmap 区域，添加 id="roadmap" -->
+    <div id="roadmap" class="roadmap">
+        <div class="section-header">
+            <h2><i class="fas fa-diagram-project"></i>  Roadmap</h2>
+            <div class="badge-dev">in development</div>
+        </div>
+        <div class="todo-items">
+            <div class="todo"><i class="fas fa-crosshairs"></i><span><strong>AimAssist</strong></span><div class="status">alpha</div></div>
+            <div class="todo"><i class="fas fa-eye"></i><span><strong>ESP</strong></span><div class="status">prototype</div></div>
+            <div class="todo"><i class="fas fa-skull"></i><span><strong>SelfDestruct</strong></span><div class="status">security</div></div>
+            <div class="todo"><i class="fas fa-palette"></i><span><strong>ChangeUIColor</strong></span><div class="status">planned</div></div>
+        </div>
+        <div style="margin-top: 1.5rem; font-size: 0.8rem; text-align:right; opacity:0.6;"><i class="fas fa-code"></i> 100% client‑side · no data leaves your machine</div>
+    </div>
+
+    <div class="github-zone">
+        <a href="https://github.com/BadJui" target="_blank" class="github-btn">
+            <i class="fab fa-github"></i>  BadJui
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        <p style="margin-top: 1rem; font-size: 0.8rem;"><i class="fas fa-star"></i> star & follow development</p>
+    </div>
+    <footer>
+        MorriesClient · ghost client for competitive play · zero telemetry, pure user‑land
+    </footer>
+</div>
+
+<script>
+    (function() {
+        const glow = document.createElement('div');
+        glow.style.position = 'fixed';
+        glow.style.width = '320px';
+        glow.style.height = '320px';
+        glow.style.background = 'radial-gradient(circle, rgba(59,255,146,0.12) 0%, rgba(0,0,0,0) 70%)';
+        glow.style.borderRadius = '50%';
+        glow.style.pointerEvents = 'none';
+        glow.style.zIndex = '9998';
+        glow.style.transition = 'transform 0.07s linear';
+        document.body.appendChild(glow);
+        document.addEventListener('mousemove', (e) => {
+            glow.style.transform = `translate(${e.clientX - 160}px, ${e.clientY - 160}px)`;
+        });
+    })();
+</script>
+</body>
+</html>
